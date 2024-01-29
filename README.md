@@ -46,21 +46,17 @@
 
 2. 原来的script标签内部就只export了一个name属性，如果只为了写一个name没必要单独export，通过vite-plugin-vue-setup-extend插件可以在script写name属性，在vite.config.ts中调用
 
+### 响应式数据ref
 
+1. ref基本类型数据、对象类型的响应式数据
+2. ref调用后返回一个refImpl对象，修改数据是修改refImpl对象的value属性
+3. 用ref定义响应式对象，value的值其实是一个proxy对象，所以ref传入对象时，同样是用reactive实现的
 
-
-
-
-响应式数据
 
 ref和reactive
 
-ref：可以基本类型数据、对象类型的响应式数据
-import { ref } from 'vue'
-let name = ref('xxxxx')
-返回一个refImpl对象，修改时候是修改name.value   模板里不需要加.value
 
-用ref定义响应式对象，value的值其实是一个proxy对象，所以ref传入对象时，同样是用reactive实现的
+
 
 
 reactive: 只能定义对象类型的响应式数据

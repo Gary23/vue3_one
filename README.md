@@ -47,7 +47,7 @@
 1. 可以单独声明一个script标签内部写setup`<script setup lang="ts"></script>`
 
 2. 原来的script标签内部就只export了一个name属性，如果只为了写一个name没必要单独export，通过vite-plugin-vue-setup-extend插件可以在script写name属性，在vite.config.ts中调用
-
+****
 ### 04_ref
 
 1. ref基本类型数据、对象类型的响应式数据
@@ -75,6 +75,80 @@
 3. 实际解构出的数据依然关联原对象，模板的view部分依然可以写object.key，也可以直接写key
 
 4. 与toRefs区别是，toRefs是把所有数据改为RefTmpl数据，toRef只能修改传入的数据
+
+
+computed
+
+输入姓  输入名
+展示全名
+import { computed } from 'vue'
+let fullName = computed(() => {
+  return xxxxxxxx    // 拼接姓和名  首字母大写
+})
+
+fullName的类型是ComputedRefImpl
+
+可修改的计算属性：
+let fullName = computed({
+  get() {
+    return xxxxxxxx
+  },
+  set(val) {
+    // 拆解val，赋值给姓和名
+  }
+})
+
+fullName.value = xxxxxx    // 触发fullName的set方法
+
+
+watch
+
+只能监视四种数据
+1 ref定义的基本类型
+
+定义sum数据渲染，点击按钮 sum+1
+
+import { watch } from 'vue'
+// 监视ref调用的数据，不需要写value，直接监听RefImpl对象
+const stopWatch = watch(sum, (nv, ov) => {
+  console.log(nv)
+})
+// 停止监视，sum大于10
+stopWatch()
+
+2 ref定义的对象类型
+
+person对象，姓名和年龄，按钮修改名字和修改年龄，修改姓名，姓名加~  修改年龄+1  直接更换整个person对象的value
+
+// 监视ref定义的对象类型数据，监视的是对象的地址，修改属性要添加配置项
+watch(person, (nv, ov) => {
+
+}, {
+  // 配置对象
+  deep: true,    // 深度监听
+  immediate: true,    // 页面渲染后先执行一遍watch,第一遍执行ov是undefined 
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+2 reactive定义的
+3 getter函数
+4 包含上述内容的数组
+
+1
+
+
+
 
 
 

@@ -46,51 +46,20 @@
 
 2. 原来的script标签内部就只export了一个name属性，如果只为了写一个name没必要单独export，通过vite-plugin-vue-setup-extend插件可以在script写name属性，在vite.config.ts中调用
 
-### 响应式数据ref
+### 04_响应式数据_基本类型数据
 
 1. ref基本类型数据、对象类型的响应式数据
 2. ref调用后返回一个refImpl对象，修改数据是修改refImpl对象的value属性
-3. 用ref定义响应式对象，value的值其实是一个proxy对象，所以ref传入对象时，同样是用reactive实现的
 
+### 05_响应式数据_对象类型数据
 
-ref和reactive
-
-
-
-
-
-reactive: 只能定义对象类型的响应式数据
-新案例
-一辆xxxx车  价值xxx万
-按钮  修改车的价格
-
-数据：
-let car = { brand: 'xxxx', price: 100 }
-
-方法：递增金额10
-
-游戏列表渲染展示周，增加方法修改数组内的数据
-
-
-reactive: 使用
-import { reactive } from 'vue'
-let car = reactive({ brand: 'xxxx', price: 100 })
-
-返回一个Proxy对象，修改时候直接修改属性值就可以
-
-
-
-ref和reactive对比
-
-车的案例加求和案例  按钮点我+1
-车的数据用reactive   求和数据用ref
-
-reactive 重新分配一个新对象会失去响应式，新对象重新调用reactive也不行，不能重新赋值，只能修改属性，如果要覆盖数据，需要用Object.assign()
-
-ref 可以给value重新赋值一个新对象，ref只是改了value属性，并没有修改变量本身，ref如果重新赋值也会失去响应式数据
-
-总结：
-基本类型直接用ref，如果需要响应式对象，对象层级不深 ref和reactive都可以    如果是复杂的对象建议用reactive
+1. 对象类型的响应式数据可以使用ref和reactive
+2. reactive调用后返回一个Proxy对象，修改时候直接修改属性值就可以
+3. ref定义响应式对象，value的值其实也是一个proxy对象，所以ref传入对象时，同样是用reactive实现的
+4. ref和reactive对比
+  - reactive：重新分配一个新对象会失去响应式，新对象重新调用reactive也不行，不能重新赋值，只能修改属性，如果要覆盖数据，需要用`Object.assign()`
+  - ref：可以给value重新赋值一个新对象，ref只是改了value属性，并没有修改变量本身，ref如果重新赋值也会失去响应式数据
+  - 总结：基本类型直接用ref，如果需要响应式对象，对象层级不深，ref和reactive都可以，如果是复杂的对象建议用reactive
 
 
 

@@ -15,16 +15,15 @@
 </template>
 
 <script lang="ts" setup name="Person">
-  import { ref, toRefs, toRef } from 'vue'
-  let person = ref({
+  // 引入reactive
+  import { reactive, toRefs, toRef } from 'vue'
+  let person = reactive({
     name: '张三',
     age: 18,
   })
 
-
-
   // let { name, age } = person   非响应式数据
-  let { name, age } = toRefs(person.value)   // 用才能结构出响应式数据，结构出的数据是 ObjectRefImpl 对象（ ref 类型的对象 ）
+  let { name, age } = toRefs(person)   // 用才能结构出响应式数据，结构出的数据是 ObjectRefImpl 对象（ ref 类型的对象 ）
 
   let age2 = toRef(person, 'age')   // 只把 name 属性改为 ObjectRefImpl 对象（ ref 类型的对象 ）
 

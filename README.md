@@ -77,78 +77,49 @@
 4. 与toRefs区别是，toRefs是把所有数据改为RefTmpl数据，toRef只能修改传入的数据
 
 
-computed
+### 07_computed
 
-输入姓  输入名
-展示全名
-import { computed } from 'vue'
-let fullName = computed(() => {
-  return xxxxxxxx    // 拼接姓和名  首字母大写
-})
+1. 从vue引入computed函数，调用使用方式与vue2相同
 
-fullName的类型是ComputedRefImpl
+2. computed函数调用后返回一个ComputedRefImpl类型的数据
 
-可修改的计算属性：
-let fullName = computed({
-  get() {
-    return xxxxxxxx
-  },
-  set(val) {
-    // 拆解val，赋值给姓和名
-  }
-})
+### 08_watch_ref定义的数据
 
-fullName.value = xxxxxx    // 触发fullName的set方法
+1. 从vue引入watch函数
 
+2. 只能监听四种数据：ref定义的基本类型数据、ref定义的对象类型数据、reactive定义的对象类型数据、getter函数
 
-watch
+3. watch调用后返回一个函数，调用后可以停止监听
 
-只能监视四种数据
-1 ref定义的基本类型
+4. ref 定义的对象类型数据，监听时需要深度监听
 
-定义sum数据渲染，点击按钮 sum+1
+### 09_watch_reactive定义的数据
 
-import { watch } from 'vue'
-// 监视ref调用的数据，不需要写value，直接监听RefImpl对象
-const stopWatch = watch(sum, (nv, ov) => {
-  console.log(nv)
-})
-// 停止监视，sum大于10
-stopWatch()
+1. reactive 定义的对象类型的监听时，默认开启了深度监听，并且不能关闭
 
-2 ref定义的对象类型
+### 10_watch_只监听单独属性
 
-person对象，姓名和年龄，按钮修改名字和修改年龄，修改姓名，姓名加~  修改年龄+1  直接更换整个person对象的value
+1. 监听基本类型属性需要一个getter函数（一个函数返回一个值，就是getter函数）
 
-// 监视ref定义的对象类型数据，监视的是对象的地址，修改属性要添加配置项
-watch(person, (nv, ov) => {
+2. 监听对象类型的属性，可以直接监听，不需要getter函数，但是只能监听对象内部属性的变化，对象整体修改监听不到（对象的内存指向变了，就监听不到了）
 
-}, {
-  // 配置对象
-  deep: true,    // 深度监听
-  immediate: true,    // 页面渲染后先执行一遍watch,第一遍执行ov是undefined 
-})
+3. 如果监听对象类型的属性本身，依然需要用getter函数，配合深度监听配置，既可以监听属性本身，也可以监听对象内部属性（只用getter就只是监听对象的内存指向，深度监听开启对内部属性的监听）
 
+### 11_watch_只监听单独属性
 
+1. 多个数据监听用数组存放所有需要监听的数据，数组内部的元素可以是ref定义的数据、reactive定义的数据、getter函数
 
+### 12_watchEffect
 
+1. 从vue对象引入watchEffect函数
 
+2. watch只能监听指定的数据，watchEffect不需要指定，只要写在watchEffect内的响应式数据都会被监听
 
+### 13_ref属性
 
+1. 如果绑定到dom元素上，ref的value属性就是dom元素本身
 
+2. 如果绑定到组件，ref的value就是组件的实例对象
 
-
-
-
-
-2 reactive定义的
-3 getter函数
-4 包含上述内容的数组
-
-1
-
-
-
-
-
+3. 如果父组件要访问子组件的属性，需要在子组件中调用defineExpose函数抛出属性，defineExpose也是从vue引入的
 

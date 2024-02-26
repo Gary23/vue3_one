@@ -123,3 +123,20 @@
 
 3. 如果父组件要访问子组件的属性，需要在子组件中调用defineExpose函数抛出属性，defineExpose也是从vue引入的
 
+### 14_ts定义接口
+
+1. 新增types目录定义数据类型，使用 interface 定义接口，接口用于限制对象的属性，接口也可以作为泛型定义给数组内的元素
+
+2. vscode的Vetur插件启用的话，可能会导致"@/types"有错误
+
+### 15_props
+
+1. 子组件调用 defineProps 接口父组件的传参，**define开头的方法可以不用引入**
+
+2. defineProps传参是一个数组，数组的元素就是接收的参数名，参数接收后可以直接在模板中渲染，如果接收的参数没有传就是undefined
+
+3. defineProps调用后返回一个Proxy对象，保存所有接收的参数
+
+4. defineProps可以通过ts定义接收的数据类型、设定是否必传、通过引用withDefaults设定默认值，设定的默认值如果是复杂类型则需要一个函数return默认数据
+
+

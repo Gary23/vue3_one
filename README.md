@@ -140,3 +140,50 @@
 4. defineProps可以通过ts定义接收的数据类型、设定是否必传、通过引用withDefaults设定默认值，设定的默认值如果是复杂类型则需要一个函数return默认数据
 
 
+
+
+
+生命周期
+
+创建：不需要写beforeCreate和created，setup内部的代码就是组件的创建
+挂载：从vue引入onBeforeMount，onMounted
+onBeforeMount(() => {
+  console.log('挂载前')
+})
+onMounted(() => {
+  console.log('挂载完')
+})
+更新：onBeforeUpdate   onUpdated
+卸载（原来的销毁）：onBeforeUnmount  onUnmount
+
+父和子的声明周期流程：
+子组件先挂载，父组件后挂载，所以App是最后才挂载的
+
+
+
+
+hooks
+
+求和案例  按钮sum+1
+引入axios
+
+模板展示图片，随机生成狗的链接：https://dog.ceo/api/breed/pembroke/images/random
+
+axios get请求这个链接，获取返回的message，存入dogList数组，每个元素就是一个狗的地址，遍历dogList渲染img元素
+
+点击按钮增加一只狗调用axios发送请求 
+
+
+
+hooks是一个js或者ts文件，让一个功能的数据和方法合到一起，也就是功能模块化的封装
+命名通常use开头
+文件抛出一个函数
+函数返回需要对外暴露的数据，这里暴露dogList和getDog
+
+把求和的部分也封装为useSum
+
+
+hooks里边可以写生命周期函数，基本上setup里能写的这里都可以写
+
+
+如果没有hooks实际上Composition组合式的api风格也没意义

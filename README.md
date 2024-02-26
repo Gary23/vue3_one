@@ -139,28 +139,17 @@
 
 4. defineProps可以通过ts定义接收的数据类型、设定是否必传、通过引用withDefaults设定默认值，设定的默认值如果是复杂类型则需要一个函数return默认数据
 
+### 16_生命周期函数
 
+1. 组件创建钩子：不需要写beforeCreate和created，setup内部的代码就是组件的创建
 
+2. 组件挂载钩子：从vue引入onBeforeMount、onMounted
 
+3. 组件更新钩子：从vue引入onBeforeUpdate、onUpdated
 
-生命周期
+4. 组件卸载钩子（原来的销毁）：从vue引入onBeforeUnmount、onUnmount
 
-创建：不需要写beforeCreate和created，setup内部的代码就是组件的创建
-挂载：从vue引入onBeforeMount，onMounted
-onBeforeMount(() => {
-  console.log('挂载前')
-})
-onMounted(() => {
-  console.log('挂载完')
-})
-更新：onBeforeUpdate   onUpdated
-卸载（原来的销毁）：onBeforeUnmount  onUnmount
-
-父和子的声明周期流程：
-子组件先挂载，父组件后挂载，所以App是最后才挂载的
-
-
-
+5. 只有子组件挂载后，父组件才会进行挂载，所以App是最后才挂载完成的
 
 hooks
 

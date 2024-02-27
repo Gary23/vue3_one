@@ -159,57 +159,23 @@
 
 3. hooks通常命名以use开头，每个功能抛出一个函数，函数return需要暴露的数据和方法
 
-路由篇
-App
-路由测试页面
-导航区
-首页   新闻    关于   href="#"   class="active"
-展示区
-以后可能要展示各种组件
+### 18_路由
 
-css直接复制
-
-npm i vue-router
-
-创建router目录  index.ts 从vue-router引入createRouter
-const router = createRouter({
-  routes: [
-    {
-      path: '路径',
-      component: 组件
-    }
-  ]
-})
-
-创建components  存放组件  About   Home    News
-
-配置路由环境
-main.ts引入router
-app.use(router)
-
-
-App
-从vue-router 引入 RouterView 标签，放到展示区
-引入RouterLink标签  替换原来的a标签  配置to属性  active-class
-
-
-
-路由器工作模式
-history模式 url更加美观，但是项目上线后需要服务器配置，面对客户的项目用的比较多
-history  createWebHistory
-hash模式  兼容性好，不需要服务端处理路径，但是不美观SEO优化比较差，后台管理项目用的比较多
-history  createWebHasHistory
-
-
-to的对象写法
-to="{
-  path: '/home',
-}"
-
-
-routes数组增加name属性，起个名字，RouterLink跳转的时候  to="{name:  'shouye'}"
-
-
+1. 安装vue-router
+2. route是路由，router是路由器，router是用来管理route的
+3. 根组件引入RouterView和RouterLink
+   - RouterView是路由视图
+   - RouterLink是路由导航链接，RouterLink的to属性配置跳转地址、active-class属性配置激活类名
+4. 路由表文件
+   - 引入createRouter
+   - 用该方法创建路由表，路由表传参routes属性，值为一个数组，
+   - 数组元素为对象包含路由信息name-路由名称、paht-路由地址、component-路由组件，最后将路由表导出
+5. 路由表工作模式配置
+   - 在调用createRouter时传参history属性配置路由模式
+   - history模式引入createWebHistory函数
+   - hash模式引入createWebHasHistory函数
+   - 将路由模式函数的返回值赋值给history属性
+6. 在项目初始化main.ts文件导入路由表，createApp的实例对象调用use方法使用路由表
 
 
 嵌套路由
@@ -217,6 +183,54 @@ routes数组增加name属性，起个名字，RouterLink跳转的时候  to="{na
 
 创建新闻详情组件detail，展示id title content
 routes数组  新闻增加children   子集路由不用写斜杠
+
+
+
+路由传参
+query，to属性的链接直接写在url上，?xxx=xxx&xxx=xxxx
+如果to是对象，可以写到query属性上
+接收参数
+从vue-router引入useRoute，调用后返回一个Proxy对象，包含路径、传参等信息，query的传参方式用query字段接收
+解构赋值query会失去响应式
+
+params
+to属性的链接直接写在url上，/xxx/xxx/xxx
+如果to是对象，可以写到params属性上，但是必须写name属性不能写path属性
+需要再路由表占位  path:'xxx/:xx/:xx/:xx'
+接收参数
+从vue-router引入useRoute，调用后返回一个Proxy对象，传参在params属性上
+
+
+路由表在路径后加? 可以配置参数的必要性
+
+
+
+
+
+路由的props配置
+
+第一种写法
+路由表配置的props属性值为true，配置后会把路由收到的params参数，当做props属性传给路由组件了
+子组件直接用defineProps方法接收传参
+
+第二种写法
+函数式写法，自己决定将什么作为props给路由组件
+函数的参数就是一个route
+函数return一个对象，对象就是给路由组件的props传参
+主要用于query方式idea传参也可以使用props配置
+
+
+第三种写法
+对象式写法，同样可以自己决定将什么作为props传给路由组件
+几乎用不到这种写法
+
+
+
+
+replace属性
+路由的历史记录有两个动作  push和replace
+RouterLink标签上加上replace属性就是replace模式了
+
 
 
 

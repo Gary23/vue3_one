@@ -151,28 +151,72 @@
 
 5. 只有子组件挂载后，父组件才会进行挂载，所以App是最后才挂载完成的
 
-hooks
+### 17_hooks
 
-求和案例  按钮sum+1
-引入axios
+1. hooks本质就是一个js或者ts文件，把一个功能的数据和方法写到一起，也就是Composition组合式的api风格
 
-模板展示图片，随机生成狗的链接：https://dog.ceo/api/breed/pembroke/images/random
+2. hooks里边可以写生命周期函数，基本上setup里能写的这里都可以写
 
-axios get请求这个链接，获取返回的message，存入dogList数组，每个元素就是一个狗的地址，遍历dogList渲染img元素
+3. hooks通常命名以use开头，每个功能抛出一个函数，函数return需要暴露的数据和方法
 
-点击按钮增加一只狗调用axios发送请求 
+路由篇
+App
+路由测试页面
+导航区
+首页   新闻    关于   href="#"   class="active"
+展示区
+以后可能要展示各种组件
+
+css直接复制
+
+npm i vue-router
+
+创建router目录  index.ts 从vue-router引入createRouter
+const router = createRouter({
+  routes: [
+    {
+      path: '路径',
+      component: 组件
+    }
+  ]
+})
+
+创建components  存放组件  About   Home    News
+
+配置路由环境
+main.ts引入router
+app.use(router)
+
+
+App
+从vue-router 引入 RouterView 标签，放到展示区
+引入RouterLink标签  替换原来的a标签  配置to属性  active-class
 
 
 
-hooks是一个js或者ts文件，让一个功能的数据和方法合到一起，也就是功能模块化的封装
-命名通常use开头
-文件抛出一个函数
-函数返回需要对外暴露的数据，这里暴露dogList和getDog
-
-把求和的部分也封装为useSum
-
-
-hooks里边可以写生命周期函数，基本上setup里能写的这里都可以写
+路由器工作模式
+history模式 url更加美观，但是项目上线后需要服务器配置，面对客户的项目用的比较多
+history  createWebHistory
+hash模式  兼容性好，不需要服务端处理路径，但是不美观SEO优化比较差，后台管理项目用的比较多
+history  createWebHasHistory
 
 
-如果没有hooks实际上Composition组合式的api风格也没意义
+to的对象写法
+to="{
+  path: '/home',
+}"
+
+
+routes数组增加name属性，起个名字，RouterLink跳转的时候  to="{name:  'shouye'}"
+
+
+
+
+嵌套路由
+新闻路由组件，列表改为动态遍历出列表数据，id  title  content
+
+创建新闻详情组件detail，展示id title content
+routes数组  新闻增加children   子集路由不用写斜杠
+
+
+

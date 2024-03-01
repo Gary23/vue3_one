@@ -5,7 +5,7 @@
         <!-- query的方式传参 -->
         <RouterLink :to="{ 
           name: 'Detail',
-          query: {
+          params: {
             title: item.title,
             id: item.id,
             content: item.content

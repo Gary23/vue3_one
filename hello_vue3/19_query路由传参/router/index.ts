@@ -19,9 +19,15 @@ const router = createRouter({
       children: [
         {
           name: 'Detail',
-          path: 'detail/:id/:content/:title',
+          path: 'detail',
           component: Detail,
-          props: true
+          props: (route) => {
+            return {
+              id: route.query.id,
+              content: route.query.content,
+              title: route.query.title,
+            }
+          }
         }
       ]
     },

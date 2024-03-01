@@ -176,60 +176,34 @@
    - hash模式引入createWebHasHistory函数
    - 将路由模式函数的返回值赋值给history属性
 6. 在项目初始化main.ts文件导入路由表，createApp的实例对象调用use方法使用路由表
+7. 路由的历史记录有两个动作，push和replace，RouterLink标签上加上replace属性就是replace模式了
+
+### 19_query路由传参
+
+1. 传参
+   - 如果to属性值是字符串则直接拼接在url之后（?key=value&key=value）
+   - 如果to属性是对象则写到query属性上（query: { key: value }）
+2. 接收
+   - 从vue-router引入useRoute函数，调用后返回一个Proxy对象，包含路径、传参等信息，query的传参方式用query字段接收
+   - useRoute函数返回的对象如果结构获取query对象需要使用toRefs函数，否则会失去响应式
+3. props配置
+   - 在路由表增加props属性，值是一个函数，接收route函数，函数return的对象就是给组件的传参
+   - 组件内通过defineProps的方式接收
+
+### 20_params路由传参
+
+1. 传参
+   - 如果to属性值是字符串直接拼接在url之后（/xxx/xxx）
+   - 如果to属性是对象则写到params属性上（params: { key: value }）
+   - params的传参方式需要在路由表占位，path属性后拼接key（path: '/xxxxx/:key/:key'）
+   - 路由表占位的key后面加?，表示这个参数非必要（path: '/xxxxx/:key?/:key'）
+2. 接收
+   - 从vue-router引入useRoute，调用后返回一个Proxy对象，传参在params属性上，使用方式与query相同
+3. props配置
+   - 在路由表增加props属性，值为true
+   - 组件内通过defineProps的方式接收
 
 
-嵌套路由
-新闻路由组件，列表改为动态遍历出列表数据，id  title  content
-
-创建新闻详情组件detail，展示id title content
-routes数组  新闻增加children   子集路由不用写斜杠
-
-
-
-路由传参
-query，to属性的链接直接写在url上，?xxx=xxx&xxx=xxxx
-如果to是对象，可以写到query属性上
-接收参数
-从vue-router引入useRoute，调用后返回一个Proxy对象，包含路径、传参等信息，query的传参方式用query字段接收
-解构赋值query会失去响应式
-
-params
-to属性的链接直接写在url上，/xxx/xxx/xxx
-如果to是对象，可以写到params属性上，但是必须写name属性不能写path属性
-需要再路由表占位  path:'xxx/:xx/:xx/:xx'
-接收参数
-从vue-router引入useRoute，调用后返回一个Proxy对象，传参在params属性上
-
-
-路由表在路径后加? 可以配置参数的必要性
-
-
-
-
-
-路由的props配置
-
-第一种写法
-路由表配置的props属性值为true，配置后会把路由收到的params参数，当做props属性传给路由组件了
-子组件直接用defineProps方法接收传参
-
-第二种写法
-函数式写法，自己决定将什么作为props给路由组件
-函数的参数就是一个route
-函数return一个对象，对象就是给路由组件的props传参
-主要用于query方式idea传参也可以使用props配置
-
-
-第三种写法
-对象式写法，同样可以自己决定将什么作为props传给路由组件
-几乎用不到这种写法
-
-
-
-
-replace属性
-路由的历史记录有两个动作  push和replace
-RouterLink标签上加上replace属性就是replace模式了
 
 
 

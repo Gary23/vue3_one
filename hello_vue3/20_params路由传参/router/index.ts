@@ -19,7 +19,7 @@ const router = createRouter({
       children: [
         {
           name: 'Detail',
-          path: 'detail/:id/:content/:title',
+          path: 'detail/:id/:content/:author?/:title',   // author 非必要
           component: Detail,
           props: true
         }

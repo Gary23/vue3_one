@@ -5,12 +5,13 @@
         <!-- query的方式传参 -->
         <RouterLink :to="{ 
           name: 'Detail',
-          query: {
+          params: {
             title: item.title,
             id: item.id,
             content: item.content
           }
         }">{{ item.title }}</RouterLink>
+        <button @click="openDetail(item)">【查看】</button>      
       </li>
     </ul>
     <div class="message-content">
@@ -20,13 +21,27 @@
 </template>
 <script lang="ts" setup name="Message">
 import { reactive } from 'vue'
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRouter } from 'vue-router'
+const router = useRouter()
 let messageList = reactive([
   { id: 'dasjhauisdhuiw992', title: '消息1', content: '消息1的内容' },
   { id: 'opqojnmfinf8333a', title: '消息2', content: '消息2的内容' },
   { id: '90890udh89ashfh3', title: '消息3', content: '消息3的内容' },
   { id: 'sdikj9e3u89f3fx23', title: '消息4', content: '消息4的内容' }
 ])
+
+function openDetail(item: any) {
+  console.log('查看详情')
+  // 传参与to相同
+  router.push({ 
+    name: 'Detail',
+    params: {
+      title: item.title,
+      id: item.id,
+      content: item.content
+    } 
+  })
+}
 </script>
 <style>
 .message {

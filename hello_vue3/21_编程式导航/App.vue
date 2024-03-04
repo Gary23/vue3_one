@@ -1,14 +1,23 @@
 <template>
   <div>
-    <Sum />
-    <hr>
-    <LoveTalk />
+    <!-- 一般组件  在components存放 -->
+    <Header />
+    <div class="navigate">
+      <!-- 三种不同的to属性写法 -->
+      <RouterLink to="/home" active-class="active">Home</RouterLink>
+      <RouterLink :to="{ path: '/about' }" active-class="active">About</RouterLink>
+      <RouterLink :to="{ name: 'Message' }" active-class="active">Message</RouterLink>
+    </div>
+    <div class="main-content">
+      <RouterView /> 
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup name="App">
-import Sum from './components/Sum.vue'
-import LoveTalk from './components/loveTalk.vue'
+import { RouterLink, RouterView } from 'vue-router'
+import Header from '@/components/Header.vue'
+
 </script>
 
 <style>

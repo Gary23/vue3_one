@@ -177,6 +177,7 @@
    - 将路由模式函数的返回值赋值给history属性
 6. 在项目初始化main.ts文件导入路由表，createApp的实例对象调用use方法使用路由表
 7. 路由的历史记录有两个动作，push和replace，RouterLink标签上加上replace属性就是replace模式了
+8. 重定向路由表，一进入页面的路由是`/`，可以配置`path: '/'`的路由，`redirect: '/home'`
 
 ### 19_query路由传参
 
@@ -202,6 +203,38 @@
 3. props配置
    - 在路由表增加props属性，值为true
    - 组件内通过defineProps的方式接收
+
+### 21_编程式导航
+
+1. 开发中大部分场景的路由跳转RouterLink标签满足不了，需要使用编程式路由跳转
+2. 引入并调用useRouter hook，返回一个路由器，路由器的push方法可以跳转路由，传参与to属性相同
+
+### 22_pinia
+
+1. pinia和vuex一样，是一个集中式状态管理工具
+2. 安装pinia，在main.ts引入createPinia，调用并创建一个pinia，`App.use(pinia)`
+3. pinia代码结构
+   - 创建store目录，存放pinia的代码，创建ts文件，命名方式通常是use开头，store结尾
+   - 从pinis引入defineStore，`export const useCountStore = defineStore('name', {})`
+   - defineStore的第一个参数是当前pinia的名字，第二个参数传参state、actions、getters
+   - state用于存储数据，是一个函数，return的对象中存放数据
+   - action用于存储函数，是一个对象，用于响应组件中的动作，处理state的数据，函数通过this访问state
+   - getter类似于computed，是一个对象，对象内的函数对state数据进行加工，函数接收state对象参数
+4. 在组件中使用pinia
+   - 在需要使用的组件引入该useXxxxStore，调用后返回一个proxy的响应式store对象
+   - 如果要解构赋值需要从pinia引入storeToRefs，不能用toRefs
+   - 组件中可以直接修改state的数据，`xxxStore.xxxx = xxx`，如果有多个值要改可以调用store对象的$patch批量修改，传入一个对象
+   - 组件中getter的使用与state相同
+   - 订阅$subscribe和watch类似，可以监视pinia数据修改，`xxxStore.\$subscribe((mutate, state) => {})`，mutate参数是本次修改的信息，state参数是修改后的数据
+
+
+### 23_store组合式写法
+
+1. 配置state、action、getter是选项式写法，组合式写法是更符合vue3的Composition风格
+
+2. defineStore第二个参数传函数，写法与setup一致
+
+3. state就是setup的变量，actions就是setup的方法，getter就是computed，最后都return出去
 
 
 

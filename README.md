@@ -235,162 +235,43 @@
 
 3. state就是setup的变量，actions就是setup的方法，getter就是computed，最后都return出去
 
+### 组件通信
 
+1. props
+   - 子组件接收父组件传参：子组件defineProps接收父组件传参
+   - 父组件接收子组件传参：父组件定义函数把函数传给子组件，子组件defineProps接收后，调用并传参给父组件
+   - 尽量避免多层嵌套的组件用props传递
 
+2. custom events
+   - 自定义事件，专门用于子组件回传给父组件
+   - 子组件给父组件传参，父组件给子组件传一个自定义事件的函数，子组件声明emit变量调用defineEmits接收事件，通过调用`emit('自定义事件名', 传参)`，把子组件的传参传给父组件
 
-组件通信
+3. mitt
+   - 需要单独安装mitt，代码通常是放到utils目录下的emitter.vue文件
+   - emitter.vue文件引入mitt，调用后得到一个emitter对象并export暴露出去，emitter的on方法能绑定事件、emit方法可以触发事件，off方法可以解绑事件，all方法是解绑所有事件
+   - 接收数据：提前绑好事件（订阅消息）
+   - 发送数据：在合适的时间触发事件（发布消息）
+   - 可以实现任意组件通信，没有父子组件的概念
+   - 如果在组件中绑定事件，在onUnmounted钩子中最好进行解绑
 
-项目准备：从课件复制
-搭建了一个路由环境，pages是路由组件
+4. v-model
+   - v-model的底层就是一个value值配合input事件，比如：`@input="username = $event.target.value"`
+   - 对于input输入框的组件，父组件传入`:value="username" @update:value="username = $event"` 和 `v-model:value="username"` 是一样的，$event是自定义组件传回的参数，只有原生事件，$event才是事件对象
+   - input输入框的组件中，defineProps接收value，绑定到input的value属性，defineEmits抛出update:value事件，在input输入框的@input事件中调用`emit('update:value', $event.target.value)`
 
-1 props
-子传父  父传子
-父组件声明字符串，在页面渲染
-子组件声明字符串，在页面渲染
+5. $attrs
+   - 父、子、孙结构关系的组件，父给孙组件传参使用
+   - 父组件给子组件传参，子组件只要没在defineProps接收的传参，就会放到$attrs对象中，子组件只要把$attrs传给孙组件就可以，孙组件直接用defineProps接收$attrs中的属性
+   - 孙组件修改父组件的数据，从父组件传一个函数，通过attrs传输到孙组件，孙组件调用修改父组件的数据
 
-子组件接收父组件传参：传递字符串给子组件，子组件defineProps接收父组件传参，渲染
-父组件接收子组件传参：父组件定义函数把函数传给子组件，子组件接收后，增加按钮调用这个函数，父组件渲染
+6. $refs和$parent
+   - $refs可以获取到子组件的实例对象，可以直接改实例对象的数据，但是子组件需要把允许修改的数据用defineExpose抛出
+   - $parent，子组件中$parent可以拿到父组件的实例对象，父组件也需要使用defineExpose把数据交给外部
 
-父->子，随意传值
-子->父，父组件必须先传一个函数
-
-尽量避免多层嵌套的组件用props传递
-
-
-2 custom events  自定义事件
-专门用于子传父
-
-子组件声明一个字符串，在页面渲染
-
-子组件给父组件传参，父组件给子组件传一个自定义事件的函数，子组件调用defineEmits声明事件，用emit接收defineEmits的返回值，子组件增加一个按钮，点击emit.xxxxx调用子组件声明的函数，调用后父组件接收到调用，把子组件的传参渲染到页面
-
-
-3 mitt
-可以实现任意组件通信
-接收数据：提前绑好事件（订阅消息）
-发送数据：在合适的时间触发事件（发布消息）
-
-npm i mitt
-
-mitt属于一个工具，新建utils目录，新建emitter.vue
-
-引入 mitt
-import mitt from 'mitt'
-调用mitt，得到emitter，emitter能绑定事件、触发事件
-const emitter = mitt()
-绑定事件
-emitter.on('abc', () => {
-   console.log('abc被调用')
-})
-emitter.on('def', () => {
-   console.log('def被调用')
-})
-
-触发事件，可以加个定时器
-emitter.emit('abc')
-emitter.emit('def')
-
-解绑，加个延迟解绑
-emitter.off('abc')
-
-清空
-emitter.all()
-
-暴露mitt，
-export default emitter
-
-
-
-
-在main引入，
-import emitter from '@/utils/emitter'
-<!-- app.use(emitter) -->
-
-
-父
-子1：声明一个字符串并渲染
-子2：声明一个字符串并渲染
-
-子2要得到子1的字符串
-子2：emmiter.on('xxx', (value) => {
-   value是子1的字符串
-   console.log('xxxxx')
-})  订阅一个消息
-子1：增加按钮，点击后emmiter.emit('xxx', 子1的字符串)
-
-注意：在组件卸载时（onUnmounted）要解绑事件
-
-
-
-
-4 v-model
-
-声明一个用户名字符串 username
-
-创建input v-model="username"
-v-model的底层就是一个value值配合input事件，比如：@input="username = $event.target.value"
-
-
-v-model用在组件标签上
-随便新建一个组件 input
- 
-父组件传入:modelValue="username"  @update:modelValue="username = $event"   
-也可以直接写v-model，v-model 等于是 :modelValue和@update:modelValue和 的写法
-$event是自定义组件传回的参数，只有原生事件，$event才是事件对象
-@update:modelValue定义一个更新modelValue属性的事件
-
-组件中，defineProps接收modelValue  绑定到input的value属性
-const emit = defineEmits(['update:modelValue'])  接收事件
-在input @input中调用emit('update:modelValue', $event.target.value)
-
-
-
-
-5 $attrs
-一级、二级、三级结构关系的组件，一级给三级传参使用
-
-一级：声明四个变量，渲染到页面，给二级组件传递这四个数据
-
-二级组件，没在defineProps接收的传参，会放到$attrs对象中
-
-一级组件给二级传参v-bind  传一个对象，二级组件给三级组件传v-bind="$attrs"
-三级组件直接用defineProps接收v-bind中的属性
-
-三级组件修改一级组件的数据，从一级组件传一个函数，通过attrs传输到三级组件，三级组件调用修改一级组件的数据
-
-
-
-
-
-6 $refs $parent
-
-$refs
-一个一级组件A，两个二级组件B和C
-
-A 声明一个数据，渲染
-B 声明两个数据，渲染
-C 声明两个数据，渲染
-
-A组件修改B组件的数据，用ref绑定B组件，A增加按钮，点击修改B的数据，B组件把数据交给外部 defineExpose
-
-给C也绑定ref，C组件也把数据交给外部defineExpose，
-
-A组件的点击事件，调用函数传参$refs，就是B和C的实例对象
-
-$parent
-B组件增加按钮，点击后给函数传参$parent，可以拿到A组件的实例对象，A组件也需要使用defineExpose把数据交给外部
-
-
-
-7 provide inject
-一级传给三级组件，完全不需要修改二级组件
-
-一级组件声明一个字符串，一个对象，渲染，引入provide
-向后代注入数据
-provide(数据的名字，数据的值)     provide.('money'. money)   provide.('car'. car)
-
-三级组件，引入inject
-inject('money', 默认值)，接收并渲染
+7. provide和inject   
+   - 父传给孙组件，完全不需要修改子组件
+   - 父组件从vue引入provide，调用provide向后代组件注入数据：provide(数据的名字，数据的值)
+   - 孙组件，从vue引入inject，声明数据接收inject的返回值：inject(数据的名字, 数据的默认值)
 
 
 

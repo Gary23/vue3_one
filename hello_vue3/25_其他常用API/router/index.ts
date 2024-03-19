@@ -5,6 +5,7 @@ import Readonly from '@/pages/03_readonly/Father.vue'
 import ShallowReadonly from '@/pages/04_shallowReadonly/Father.vue'
 import ToRaw from '@/pages/05_toRaw/Father.vue'
 import MarkRaw from '@/pages/06_markRaw/Father.vue'
+import CustomRef from '@/pages/07_customRef/Father.vue'
 
 export default createRouter({
 	history: createWebHistory(),
@@ -32,6 +33,10 @@ export default createRouter({
 		{
 			path: '/markRaw',
 			component: MarkRaw
+		},
+		{
+			path: '/customRef',
+			component: CustomRef
 		},
 	]
 })
